@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,9 +14,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.retail.Exception.UserNotFoundException;
 import com.retail.Service.DiscountService;
 import com.retail.Service.UserService;
 import com.retail.model.BillingItems;
+import com.retail.model.BillingItemsResponse;
 import com.retail.model.Groceries;
 import com.retail.model.Item;
 import com.retail.model.User;
@@ -29,7 +33,7 @@ public class BillingController {
 	private UserService userService;
 
 	@RequestMapping(value = "/applyDiscount/{id}",method = RequestMethod.POST, consumes = "application/json")
-	public ResponseEntity<String> applyDiscounts(@RequestBody BillingItems items,@PathVariable long id){
+	public ResponseEntity<BillingItemsResponse> applyDiscounts(@Valid @RequestBody BillingItems items,@PathVariable long id){
 		
 		try {
 			items.getGroceries().getGroceriesList().forEach(i -> System.out.println(i.getName()));
@@ -37,11 +41,11 @@ public class BillingController {
 		
 			User user = userService.getUser(id).get();
 		
-			items = discountService.processDiscount(items, user);
+			BillingItemsResponse responseObject = discountService.processDiscount(items, user);
 		
-			return ResponseEntity.ok("$"+items.getTotal());
+			return ResponseEntity.ok(responseObject);
 		} catch(NoSuchElementException ex) {
-			return ResponseEntity.ok("User Not FOund");
+			throw new UserNotFoundException("For Id: "+id);
 		}
 	}
 

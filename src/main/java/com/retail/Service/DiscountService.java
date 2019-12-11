@@ -1,9 +1,10 @@
 package com.retail.Service;
 
 import com.retail.model.BillingItems;
+import com.retail.model.BillingItemsResponse;
 import com.retail.model.User;
 
 public interface DiscountService {
 
-	public BillingItems processDiscount(BillingItems items, User user);
+	public BillingItemsResponse processDiscount(BillingItems items, User user);
 }

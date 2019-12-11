@@ -2,13 +2,13 @@ package com.retail.Service;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.Calendar;
 import java.util.List;
-import java.util.TimeZone;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.retail.model.BillingItems;
+import com.retail.model.BillingItemsResponse;
 import com.retail.model.Groceries;
 import com.retail.model.Item;
 import com.retail.model.User;
@@ -16,8 +16,27 @@ import com.retail.model.User;
 @Service("discountService")
 public class DiscountServiceImpl implements DiscountService {
 
+	private static final String USER_TYPE_AFFILIATE = "affiliate";
+
+	private static final String USER_TYPE_EMPLOYEE = "employee";
+
+	private static final String ASIA_KOLKATA = "Asia/Kolkata";
+
+	@Value("${discount.store.employee}")
+	private double employeeDiscount;
+
+	@Value("${discount.store.affiliate}")
+	private double affiliateDiscount;
+
+	@Value("${discount.store.loyal.customer}")
+	private double loyalCustomerDiscount;
+
 	@Override
-	public BillingItems processDiscount(BillingItems items, User user) {
+	public BillingItemsResponse processDiscount(BillingItems items, User user) {
+
+		BillingItemsResponse responseObject = new BillingItemsResponse();
+		responseObject.setBillingItems(items);
+
 		List<Item> itemsList = items.getItemsList();
 
 		double totalItemSum = 0, totalGrocerySum = 0;
@@ -32,44 +51,45 @@ public class DiscountServiceImpl implements DiscountService {
 			totalGrocerySum += groceriesList.get(i).getValue();
 		}
 
-		items.setItemsSum(checkApplyDiscount(totalItemSum, user));
+		responseObject.setTotalItemsPrice(totalItemSum);
+		responseObject.setDiscountedItemsPrice(checkApplyDiscount(totalItemSum, user));
 
-		items.setGroceriesSum(totalGrocerySum);
+		responseObject.setTotalGroceryPrice(totalGrocerySum);
 
-		double total = totalGrocerySum + items.getItemsSum();
+		double total = totalGrocerySum + responseObject.getDiscountedItemsPrice();
 
 		// subtract %5 for every $100 discount from totalItemSum.
 		if (total > 100) {
 			int nthNum = (int) (total / 100);
 			total -= 5 * nthNum;
-			items.setTotal(total);
+			responseObject.setNetPayableAmount(total);
 		}
 
-		return items;
+		return responseObject;
 	}
 
 	private double checkApplyDiscount(double totalItemSum, User user) {
 
-		LocalDate dateBefore2years = LocalDate.now(ZoneId.of("Asia/Kolkata")).minusYears(-2);
+		LocalDate dateBefore2years = LocalDate.now(ZoneId.of(ASIA_KOLKATA)).minusYears(-2);
 
 		double discountedSumForEmployee = 0;
 		double discountedSumForAffiliate = 0;
 		double discountedSumBasedOnCustomerLoyalty = 0;
 
-		if (user.getUserType().equalsIgnoreCase("employee")) {
+		if (user.getUserType().equalsIgnoreCase(USER_TYPE_EMPLOYEE)) {
 
-			discountedSumForEmployee = totalItemSum - (totalItemSum * 0.3);
+			discountedSumForEmployee = totalItemSum - (totalItemSum * employeeDiscount / 100);
 			return discountedSumForEmployee;
 
-		} else if (user.getUserType().equalsIgnoreCase("affiliate")) {
+		} else if (user.getUserType().equalsIgnoreCase(USER_TYPE_AFFILIATE)) {
 
-			discountedSumForAffiliate = totalItemSum - (totalItemSum * 0.1);
+			discountedSumForAffiliate = totalItemSum - (totalItemSum * affiliateDiscount / 100);
 			return discountedSumForAffiliate;
 
 		}
 
 		if (dateBefore2years.isAfter(user.getCreatedAt().toLocalDate())) {
-			discountedSumBasedOnCustomerLoyalty = totalItemSum - (totalItemSum * 0.05);
+			discountedSumBasedOnCustomerLoyalty = totalItemSum - (totalItemSum * loyalCustomerDiscount / 100);
 
 			return discountedSumBasedOnCustomerLoyalty;
 		}

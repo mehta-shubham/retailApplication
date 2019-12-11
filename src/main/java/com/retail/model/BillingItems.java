@@ -2,14 +2,15 @@ package com.retail.model;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 public class BillingItems {
 
+	@Valid
 	private List<Item> itemsList;
+	@Valid
 	private Groceries groceries;
 
-	private double itemsSum;
-	private double groceriesSum;
-	
 	private double total;
 
 	public double getTotal() {
@@ -26,22 +27,6 @@ public class BillingItems {
 	public BillingItems(List<Item> itemsList, Groceries groceries) {
 		this.itemsList = itemsList;
 		this.groceries = groceries;
-	}
-
-	public double getItemsSum() {
-		return itemsSum;
-	}
-
-	public void setItemsSum(double itemsSum) {
-		this.itemsSum = itemsSum;
-	}
-
-	public double getGroceriesSum() {
-		return groceriesSum;
-	}
-
-	public void setGroceriesSum(double groceriesSum) {
-		this.groceriesSum = groceriesSum;
 	}
 
 	public List<Item> getItemsList() {

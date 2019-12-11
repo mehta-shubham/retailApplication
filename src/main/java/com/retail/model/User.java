@@ -7,21 +7,28 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+
+import com.retail.annotation.ValidateUserType;
 
 @Entity
-@Table(name = "storeusers")
+@Table(name = "store_users")
 public class User {
 
 	@Id
 	@Column(name = "id")
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY, generator="seq_generator")
+	@SequenceGenerator(name="seq_generator", sequenceName="users_seq")
 	private long id;
 
 	@Column(name = "first_Name", nullable = false)
+	@NotBlank(message = "First Name cannot be Empty")
 	private String firstName;
 	
 	@Column(name = "last_Name", nullable = false)
+	@NotBlank(message = "Last Name cannot be Empty")
 	private String lastName;
 	
 	@Column(name = "create_At", nullable = false)
@@ -31,6 +38,7 @@ public class User {
 	private Date updatedAt;
 	
 	@Column(name = "user_Type", nullable = true)
+	@ValidateUserType
 	private String userType;
 
 	public User(String firstName, String lastName, String userType, Date createdAt, Date updatedAt) {

@@ -2,8 +2,11 @@ package com.retail.model;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 public class Groceries {
 
+	@Valid
 	private List<Item> groceriesList;
 	
 	public Groceries(){
