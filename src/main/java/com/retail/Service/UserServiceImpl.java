@@ -1,5 +1,7 @@
 package com.retail.Service;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,8 +15,8 @@ public class UserServiceImpl implements UserService {
 	UserDao userDao;
 	
 	@Override
-	public Iterable<User> getAllUsers(){
-		return userDao.findAll();
+	public Optional<User> getUser(Long id){
+		return userDao.findById(id);
 	}
 	
 	@Override
