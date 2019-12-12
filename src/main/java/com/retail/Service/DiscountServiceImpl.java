@@ -1,4 +1,4 @@
-package com.retail.Service;
+package com.retail.service;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -58,7 +58,7 @@ public class DiscountServiceImpl implements DiscountService {
 
 		double total = totalGrocerySum + responseObject.getDiscountedItemsPrice();
 
-		// subtract %5 for every $100 discount from totalItemSum.
+		// subtract $5 for every $100 discount from totalItemSum. Not applicable on Grocery items
 		if (total > 100) {
 			int nthNum = (int) (total / 100);
 			total -= 5 * nthNum;
@@ -68,6 +68,12 @@ public class DiscountServiceImpl implements DiscountService {
 		return responseObject;
 	}
 
+	/**
+	 * method to apply discounts based on customer type and loyalty. Not applicable on Grocery items
+	 * @param totalItemSum
+	 * @param user
+	 * @return discountedItemsSum
+	 */
 	private double checkApplyDiscount(double totalItemSum, User user) {
 
 		LocalDate dateBefore2years = LocalDate.now(ZoneId.of(ASIA_KOLKATA)).minusYears(-2);
@@ -75,19 +81,23 @@ public class DiscountServiceImpl implements DiscountService {
 		double discountedSumForEmployee = 0;
 		double discountedSumForAffiliate = 0;
 		double discountedSumBasedOnCustomerLoyalty = 0;
-
+		
+		//if customer is employee of store then customer gets 30% discount
 		if (user.getUserType().equalsIgnoreCase(USER_TYPE_EMPLOYEE)) {
 
 			discountedSumForEmployee = totalItemSum - (totalItemSum * employeeDiscount / 100);
 			return discountedSumForEmployee;
 
-		} else if (user.getUserType().equalsIgnoreCase(USER_TYPE_AFFILIATE)) {
+		}
+		//if customer is affiliate to store then customer gets 10% discount
+		else if (user.getUserType().equalsIgnoreCase(USER_TYPE_AFFILIATE)) {
 
 			discountedSumForAffiliate = totalItemSum - (totalItemSum * affiliateDiscount / 100);
 			return discountedSumForAffiliate;
 
 		}
 
+		//if customer is loyal to store for more than 2 years then customer gets 5% discount
 		if (dateBefore2years.isAfter(user.getCreatedAt().toLocalDate())) {
 			discountedSumBasedOnCustomerLoyalty = totalItemSum - (totalItemSum * loyalCustomerDiscount / 100);
 

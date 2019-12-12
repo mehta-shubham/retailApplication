@@ -1,4 +1,4 @@
-package com.retail.Controller;
+package com.retail.controller;
 
 import java.util.NoSuchElementException;
 
@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.retail.Exception.UserCreationException;
-import com.retail.Exception.UserNotFoundException;
-import com.retail.Service.UserService;
+import com.retail.exception.UserCreationException;
+import com.retail.exception.UserNotFoundException;
 import com.retail.model.User;
+import com.retail.service.UserService;
 
 @RestController
 public class UserController {

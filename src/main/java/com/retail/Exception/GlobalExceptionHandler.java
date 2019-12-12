@@ -1,4 +1,4 @@
-package com.retail.Exception;
+package com.retail.exception;
 
 import java.io.IOException;
 import java.time.LocalDate;

@@ -1,18 +1,18 @@
-package com.retail.Service;
+package com.retail.service;
 
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.retail.Dao.UserDao;
 import com.retail.model.User;
+import com.retail.repository.UserRepository;
 
 @Service
 public class UserServiceImpl implements UserService {
 
 	@Autowired
-	UserDao userDao;
+	UserRepository userDao;
 	
 	@Override
 	public Optional<User> getUser(Long id){

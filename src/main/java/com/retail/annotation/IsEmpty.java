@@ -11,6 +11,11 @@ import javax.validation.Payload;
 
 import com.retail.validator.EmptyValidatior;
 
+/**
+ * validates Item Names in request body
+ * @author shubham.mehta
+ *
+ */
 @Target(value=ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = EmptyValidatior.class)

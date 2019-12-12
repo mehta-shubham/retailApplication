@@ -11,6 +11,11 @@ import javax.validation.Payload;
 
 import com.retail.validator.UserTypeValidatior;
 
+/**
+ * validates user type in request body while creating user
+ * @author shubham.mehta
+ *
+ */
 @Target(value=ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = UserTypeValidatior.class)
