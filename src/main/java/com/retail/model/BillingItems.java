@@ -11,16 +11,13 @@ public class BillingItems {
 	@Valid
 	private Groceries groceries;
 
-	private double total;
+	//private double total;
 
-	public double getTotal() {
-		return total;
-	}
-
-	public void setTotal(double total) {
-		this.total = total;
-	}
-
+	/*
+	 * public double getTotal() { return total; }
+	 * 
+	 * public void setTotal(double total) { this.total = total; }
+	 */
 	public BillingItems() {
 	}
 

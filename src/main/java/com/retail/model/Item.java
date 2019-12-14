@@ -1,8 +1,7 @@
 package com.retail.model;
 
-import javax.validation.constraints.NotNull;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.retail.annotation.IsDoubleEmpty;
 import com.retail.annotation.IsEmpty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -10,7 +9,7 @@ public class Item {
 
 	@IsEmpty
 	private String name;
-	@NotNull
+	@IsDoubleEmpty
 	private double value;
 	
 	public Item(){
