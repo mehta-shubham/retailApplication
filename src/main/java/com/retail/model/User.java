@@ -14,30 +14,30 @@ import javax.validation.constraints.NotBlank;
 import com.retail.annotation.ValidateUserType;
 
 @Entity
-@Table(name = "store_users")
+@Table(name = "STORE_USERS")
 public class User {
 
 	@Id
-	@Column(name = "id")
+	@Column(name = "ID")
 	@GeneratedValue(strategy = GenerationType.IDENTITY, generator="seq_generator")
 	@SequenceGenerator(name="seq_generator", sequenceName="users_seq")
 	private long id;
 
-	@Column(name = "first_Name", nullable = false)
+	@Column(name = "FIRST_NAME", nullable = false)
 	@NotBlank(message = "First Name cannot be Empty")
 	private String firstName;
 	
-	@Column(name = "last_Name", nullable = false)
+	@Column(name = "LAST_NAME", nullable = false)
 	@NotBlank(message = "Last Name cannot be Empty")
 	private String lastName;
 	
-	@Column(name = "create_At", nullable = false)
+	@Column(name = "CREATED_AT", nullable = false)
 	private Date createdAt;
 	
-	@Column(name = "updated_At", nullable = true)
+	@Column(name = "UPDATED_AT", nullable = true)
 	private Date updatedAt;
 	
-	@Column(name = "user_Type", nullable = true)
+	@Column(name = "USER_TYPE", nullable = true)
 	@ValidateUserType
 	private String userType;
 

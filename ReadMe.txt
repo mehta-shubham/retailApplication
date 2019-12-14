@@ -100,6 +100,8 @@ Sample request:
     "userType": "customer"
 }
 
+
+Please Note: User Type can be of 3 types: 'employee', 'affiliate', 'customer'
 _____________________________________________________________________________________________________________
 ASSUMPTIONS:
 
